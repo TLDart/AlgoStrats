@@ -171,7 +171,7 @@ bool check(vector<vector<int>> &a){
     }
     return false;
 }
-void recursion(vector<vector<int>> &a, int k, int m, int lmv[4]){ // Params vector a , rec depth, max rep , last mv
+void recursion(vector<vector<int>> &a, int k, int m, int lmv ){ // Params vector a , rec depth, max rep , last mv
   if((k == m  && !check(a)) || k >= best){
     return;
   }
@@ -243,9 +243,9 @@ void solve(vector<vector<int>> &a, int k){
      }
    }
 
-  for(auto it = m.begin(); it != m.end(); it++){
+  /* for(auto it = m.begin(); it != m.end(); it++){
       cout << it->first << " " << it->second  << endl;
-    }
+    } */
    //Check if the square is valid
 
    recursion(a,0,k,0);
