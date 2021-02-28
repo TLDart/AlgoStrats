@@ -171,7 +171,7 @@ bool check(vector<vector<int>> &a){
     }
     return false;
 }
-void recursion(vector<vector<int>> &a, int k, int m, int lmv ){ // Params vector a , rec depth, max rep , last mv
+void recursion(vector<vector<int>> &a, int k, int m, vector<int> lmv ){ // Params vector a , rec depth, max rep , last mv
   if((k == m  && !check(a)) || k >= best){
     return;
   }
@@ -185,24 +185,23 @@ void recursion(vector<vector<int>> &a, int k, int m, int lmv ){ // Params vector
     return;
   }
 
-  vector<vector<int>> b(a),c(a),d(a),e(a);
   int t1,t2,t3,t4;
-  t1 = slideL(b);
-  t2 = slideR(c);
-  t3 = slideU(d);
-  t4 = slideD(e);
-
-
+  
   //cout << lmv << endl;
-  if(a != b && lmv != 20)// Only execute if they are different
-    recursion(b,k+1,m, 1 * 10 + min(t1,1));
-  if(a != c && lmv != 10)
-    recursion(c,k+1,m, 2 * 10 + min(t2,1));
-  if(a != d && lmv != 40)
-    recursion(d,k+1,m, 3 * 10 + min(t3,1));
-  if(a != e && lmv != 30)
-    recursion(e,k+1,m, 4 * 10 + min(t4,1));
-
+  if(lmv[0] && lmv[1] ){// Only execute if they are different
+    vector<vector<int>> b(a), c(a); 
+    t1 = slideL(b);
+    recursion(b,k+1,m, {t1,t1,1,1});
+    t2 = slideR(c);
+    recursion(c,k+1,m, {t2,t2,1,1});
+  }
+  if(lmv[2] && lmv[3]){
+    vector<vector<int>> d(a), e(a); 
+    t3 = slideU(d); 
+    recursion(d,k+1,m, {1,1,t3,t3});
+    t4 = slideD(e);
+    recursion(e,k+1,m, {1,1,t4,t4});
+  }
   return;
 
 
@@ -248,7 +247,7 @@ void solve(vector<vector<int>> &a, int k){
     } */
    //Check if the square is valid
 
-   recursion(a,0,k,0);
+   recursion(a,0,k,{1,1,1,1});
    if(best == INT_MAX){
      cout << "no solution" << endl;
    }
