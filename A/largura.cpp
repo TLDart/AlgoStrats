@@ -18,21 +18,16 @@ void printpointset(vector<vector<int>> &a){
             cout << endl;
     }
 }
-
-void pp(int k){
-  for(int i = 0 ; i < k; i++)
-    cout << " " ;
-}
-void slideL(vector<vector<int>> &a, int &mrg, int &swp){\
-    int pos, lst;
+int slideL(vector<vector<int>> &a){\
+    int pos, lst, cnt = 0;
     for(int i = 0; i  <  (int)a.size(); i++){ // Act over the colums up >> down , right >> left
         lst = a.size() -1;
         for(int j = a.size() - 2 ; j >= 0; j--){ //Calculate
             if(a[i][lst] == a[i][j]){
                 a[i][j] *= 2;
-                if(a[i][j] != 0)
-                  mrg++;
+                cnt++;
                 a[i][lst] = 0;
+                cnt++;
                 lst = j-1;
                 j--;
             }
@@ -51,21 +46,20 @@ void slideL(vector<vector<int>> &a, int &mrg, int &swp){\
                 a[i][pos] = a[i][j];
                 a[i][j] = 0;
                 pos++;
-                swp++;
             }
         }
     }
+    return cnt;
 }
 
-void slideR(vector<vector<int>> &a, int &mrg, int &swp){
-    int pos,lst;
+int slideR(vector<vector<int>> &a){
+    int pos,lst, cnt = 0;
     for(int i = 0; i  <  (int)a.size(); i++){ // Act over the colums up >> down , left >> right
         lst = 0;
         for(int j =  1 ; j <  (int)a.size(); j++){ //Sum from right to left and skip if there is an addition
             if(a[i][lst] == a[i][j]){
                 a[i][j] *= 2;
-                if(a[i][j] != 0)
-                  mrg++;
+                cnt++;
                 a[i][lst] = 0;
                 lst = j + 1;
                 j++;
@@ -87,22 +81,22 @@ void slideR(vector<vector<int>> &a, int &mrg, int &swp){
                 a[i][pos] = a[i][j];
                 a[i][j] = 0;
                 pos--;
-                swp++;
             }
         }
     }
+    return cnt;
 }
 
-void slideU(vector<vector<int>> &a, int &mrg, int &swp){
-    int pos, lst;
+int slideU(vector<vector<int>> &a){\
+    int pos, lst, cnt = 0;
     for(int j = 0; j  <  (int)a.size(); j++){ // Act over the colums up >> down , right >> left
         lst = a.size() -1;
         for(int i = a.size() - 2 ; i >= 0; i--){ //Calculate
             if(a[lst][j] == a[i][j]){
                 a[i][j] *= 2;
-                if(a[i][j] != 0)
-                  mrg++;
+                cnt++;
                 a[lst][j] = 0;
+                cnt++;
                 lst = i-1;
                 i--;
             }
@@ -121,21 +115,20 @@ void slideU(vector<vector<int>> &a, int &mrg, int &swp){
                 a[pos][j] = a[i][j];
                 a[i][j] = 0;
                 pos++;
-                swp++;
             }
         }
     }
+    return cnt;
 }
 
-void slideD(vector<vector<int>> &a, int &mrg, int &swp){
-    int pos, lst;
+int slideD(vector<vector<int>> &a){\
+    int pos, lst, cnt = 0;
     for(int j = 0; j  <  (int)a.size(); j++){ // Act over the colums up >> down , right >> left
         lst = 0;
         for(int i = 1 ; i <  (int)a.size(); i++){ //Calculate
             if(a[lst][j] == a[i][j]){
                 a[i][j] *= 2;
-                if(a[i][j] != 0)
-                  mrg++;
+                cnt++;
                 a[lst][j] = 0;
                 lst = i+1;
                 i++;
@@ -155,10 +148,10 @@ void slideD(vector<vector<int>> &a, int &mrg, int &swp){
                 a[pos][j] = a[i][j];
                 a[i][j] = 0;
                 pos--;
-                swp++;
             }
         }
     }
+    return cnt;
 }
 
 bool check(vector<vector<int>> &a){
@@ -173,91 +166,103 @@ bool check(vector<vector<int>> &a){
           }
       }
     }
-    if(cnt == 1 || cnt == 0){
+    if(cnt == 1){
       return true;
     }
     return false;
 }
+void recursion(vector<vector<vector<int>>> &vec, int k, int m ){ // Params vector vec , rec depth, max rep
 
-
-
-
-void recursion(vector<vector<int>> &a, int k, int m, int ls, int lu){ // Params vector a , rec depth, max rep , last mv
-  bool val = check(a);
+  int size = vec.size();
   
-  
-  if((k == m && !val) || k >= best){
-    return;
-  }
-  if(val){
+  vector<vector<vector<int>>> aux;
+  int i;
+  for (i = 0; i < size; i++){
+
+    if((k == m  && !check(vec[i])) || k >= best){
+      return;
+    }
+    if(check(vec[i])){
       if(k < best){
         best = k;
       }
-      //cout << "found"  << endl;
-      //cout << m << " "<< k << " "<< best << endl;
-      //printpointset(a);
       return;
     }
+
+    vector<vector<int>> a(vec[i]), b(vec[i]), c(vec[i]), d(vec[i]);
+
+    slideD(a);
+    slideL(b);
+    slideR(c);
+    slideU(d);
+
+    aux.push_back(a);
+    aux.push_back(b);
+    aux.push_back(c);
+    aux.push_back(d);
+
+  }
+  recursion(aux, k+1, m);
   
-  int m1 = 0,m2 = 0 ,m3 = 0,m4 = 0;
-  int s1 = 0,s2 = 0 ,s3 = 0,s4 = 0;
-  if(ls){
-    vector<vector<int>> b(a), c(a);
-    slideL(b, m1, s1);
-    slideR(c, m2, s2);
-
-    if (m1 || s1)
-      recursion(b,k+1,m, m1, 1);
-    if(m2 || s2)
-      recursion(c,k+1,m, m2, 1);
-  }
-
-  if(lu){
-    vector<vector<int>> d(a), e(a); 
-
-    slideU(d, m3, s3);
-    slideD(e, m4, s4);
-
-    cout << s3 << " " << s4 << endl;
-
-    if (m3 || s3)
-      recursion(d,k+1,m, 1, m3);
-    if(m4 || s4)
-      recursion(e,k+1,m, 1, m4);
-  }
-
-  return;
-
 }
+
+
 void solve(vector<vector<int>> &a, int k){
+   //slideD(a);
+   //printpointset(a);
    map<int, int> m;
 
    //Preprocess the data
-   int sum = 0;
-  for(int i = 0; i < (int) a.size(); i++){
+   for(int i = 0; i < (int) a.size(); i++){
      for(int j = 0; j < (int) a.size(); j++){
-        sum+= a[i][j];
+       auto it = m.find(a[i][j]);
+       if(a[i][j] != 0){
+         if(it != m.end()){
+           m[a[i][j]]++;
+         }
+         else{
+           m[a[i][j]] = 1;
+         }
+       }
      }
    }
-   //Check if the square is valid
-  if(log2(sum) != (int) log2(sum)){
-    cout << "no solution" << endl;
-    return;
-  }
-  else
-   recursion(a,0,k,2,2);
 
-  if(best == INT_MAX){
-    cout << "no solution" << endl;
-  }
-  else{
-    cout << best << endl;
-  }
+    /* for(auto it = m.begin(); it != m.end(); it++){
+      cout << it->first << " " << it->second  << endl;
+    } */
+   bool val = check(a);
+   for(auto it = m.begin(); it != m.end(); it++){
+     if(it->second % 2 != 0 && !val){
+       cout << "no solution" << endl;
+       return;
+     }
+     else{
+       if(it != --m.end()){
+         m[it->first * 2] += it->second /2;
+       }
+     }
+   }
+
+  /* for(auto it = m.begin(); it != m.end(); it++){
+      cout << it->first << " " << it->second  << endl;
+    } */
+   //Check if the square is valid
+
+   vector<vector<vector<int>>> vec = {a}; 
+
+   recursion(vec,0,k);
+   if(best == INT_MAX){
+     cout << "no solution" << endl;
+   }
+   else{
+     cout << best << endl;
+   }
    //cout << -1 << endl;
    //If it is valid then we solve
    //recursion(a,k, 0);
    //cout << best << endl;
 }
+
 
 int main(){
     int tt, n, k, p;
@@ -276,6 +281,7 @@ int main(){
         }
         //printpointset(a);
         solve(a,k);
-        //test(a,k);
+
+
     }
 }
