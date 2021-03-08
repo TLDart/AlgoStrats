@@ -18,24 +18,21 @@ void printpointset(vector<vector<int>> &a){
             cout << endl;
     }
 }
-
-void pp(int k){
-  for(int i = 0 ; i < k; i++)
-    cout << " " ;
-}
-void slideL(vector<vector<int>> &a, int &mrg, int &swp){\
+void slideL(vector<vector<int>> &a, int &mrg, int &swp){
     int pos, lst;
-    for(int i = 0; i  <  (int)a.size(); i++){ // Act over the colums up >> down , right >> left
-        lst = a.size() -1;
-        for(int j = a.size() - 2 ; j >= 0; j--){ //Calculate
+   
+    for(int i = 0; i  <  (int)a.size(); i++){ // Act over the colums up >> down , left >> right
+        lst = 0;
+        for(int j =  1 ; j <  (int)a.size(); j++){ //Sum from right to left and skip if there is an addition
             if(a[i][lst] == a[i][j]){
                 a[i][j] *= 2;
                 if(a[i][j] != 0)
                   mrg++;
                 a[i][lst] = 0;
-                lst = j-1;
-                j--;
+                lst = j + 1;
+                j++;
             }
+
             else if(a[i][j] != 0){
                 lst = j;
             }
@@ -59,18 +56,17 @@ void slideL(vector<vector<int>> &a, int &mrg, int &swp){\
 
 void slideR(vector<vector<int>> &a, int &mrg, int &swp){
     int pos,lst;
-    for(int i = 0; i  <  (int)a.size(); i++){ // Act over the colums up >> down , left >> right
-        lst = 0;
-        for(int j =  1 ; j <  (int)a.size(); j++){ //Sum from right to left and skip if there is an addition
+    for(int i = 0; i  <  (int)a.size(); i++){ // Act over the colums up >> down , right >> left
+        lst = a.size() -1;
+        for(int j = a.size() - 2 ; j >= 0; j--){ //Calculate
             if(a[i][lst] == a[i][j]){
                 a[i][j] *= 2;
                 if(a[i][j] != 0)
                   mrg++;
                 a[i][lst] = 0;
-                lst = j + 1;
-                j++;
+                lst = j-1;
+                j--;
             }
-
             else if(a[i][j] != 0){
                 lst = j;
             }
@@ -96,21 +92,21 @@ void slideR(vector<vector<int>> &a, int &mrg, int &swp){
 void slideU(vector<vector<int>> &a, int &mrg, int &swp){
     int pos, lst;
     for(int j = 0; j  <  (int)a.size(); j++){ // Act over the colums up >> down , right >> left
-        lst = a.size() -1;
-        for(int i = a.size() - 2 ; i >= 0; i--){ //Calculate
+        lst = 0;
+        for(int i = 1 ; i <  (int)a.size(); i++){ //Calculate
             if(a[lst][j] == a[i][j]){
                 a[i][j] *= 2;
                 if(a[i][j] != 0)
                   mrg++;
                 a[lst][j] = 0;
-                lst = i-1;
-                i--;
+                lst = i+1;
+                i++;
             }
             else if(a[i][j] != 0){
                 lst = i;
             }
         }
-}
+    } 
     for(int j = 0; j <  (int)a.size(); j++){ // Colapse matrix upwards
         pos = -1;
         for(int i = 0 ; i <  (int)a.size(); i++){
@@ -129,22 +125,23 @@ void slideU(vector<vector<int>> &a, int &mrg, int &swp){
 
 void slideD(vector<vector<int>> &a, int &mrg, int &swp){
     int pos, lst;
-    for(int j = 0; j  <  (int)a.size(); j++){ // Act over the colums up >> down , right >> left
-        lst = 0;
-        for(int i = 1 ; i <  (int)a.size(); i++){ //Calculate
+   
+for(int j = 0; j  <  (int)a.size(); j++){ // Act over the colums up >> down , right >> left
+        lst = a.size() -1;
+        for(int i = a.size() - 2 ; i >= 0; i--){ //Calculate
             if(a[lst][j] == a[i][j]){
                 a[i][j] *= 2;
                 if(a[i][j] != 0)
                   mrg++;
                 a[lst][j] = 0;
-                lst = i+1;
-                i++;
+                lst = i-1;
+                i--;
             }
             else if(a[i][j] != 0){
                 lst = i;
             }
         }
-}
+    }
     for(int j = 0; j <  (int)a.size(); j++){ // Colapse matrix upwards
         pos = -1;
         for(int i = a.size() -1  ; i > -1; i--){
@@ -179,25 +176,26 @@ bool check(vector<vector<int>> &a){
     return false;
 }
 
-
+void printrec(vector<vector<int>> &v, int recLevel, string move){
+    cout << "---------------------" << endl;
+    cout << "Recursion Depth " << recLevel<< endl;
+    cout << "Move " << move << endl;
+    printpointset(v); 
+    cout << "---------------------" << endl;
+}
 
 
 void recursion(vector<vector<int>> &a, int k, int m, int ls, int lu){ // Params vector a , rec depth, max rep , last mv
   bool val = check(a);
-  
-  
-  if((k == m && !val) || k >= best){
-    return;
-  }
   if(val){
       if(k < best){
         best = k;
       }
-      //cout << "found"  << endl;
-      //cout << m << " "<< k << " "<< best << endl;
-      //printpointset(a);
       return;
     }
+  if((k == m) || k >= best){
+    return;
+  }
   
   int m1 = 0,m2 = 0 ,m3 = 0,m4 = 0;
   int s1 = 0,s2 = 0 ,s3 = 0,s4 = 0;
@@ -205,6 +203,11 @@ void recursion(vector<vector<int>> &a, int k, int m, int ls, int lu){ // Params 
     vector<vector<int>> b(a), c(a);
     slideL(b, m1, s1);
     slideR(c, m2, s2);
+
+    /* printrec(b,k,"Left");
+    cout << m1 << " " << s1 << endl;
+    printrec(c,k,"Right");
+    cout << m2 << " " << s2 << endl; */
 
     if (m1 || s1)
       recursion(b,k+1,m, m1, 1);
@@ -218,12 +221,16 @@ void recursion(vector<vector<int>> &a, int k, int m, int ls, int lu){ // Params 
     slideU(d, m3, s3);
     slideD(e, m4, s4);
 
-    cout << s3 << " " << s4 << endl;
+   /*  printrec(d,k,"Up");
+    cout << m3 << " " << s3 << endl;
+    printrec(e,k,"DOwn");
+    cout << m4 << " " << s4 << endl; */
 
     if (m3 || s3)
       recursion(d,k+1,m, 1, m3);
-    if(m4 || s4)
+    if(m4 || s4){
       recursion(e,k+1,m, 1, m4);
+    }
   }
 
   return;
@@ -240,7 +247,7 @@ void solve(vector<vector<int>> &a, int k){
      }
    }
    //Check if the square is valid
-  if(log2(sum) != (int) log2(sum)){
+  if(log2(sum) != floor(log2(sum))){
     cout << "no solution" << endl;
     return;
   }
@@ -264,7 +271,7 @@ int main(){
     cin >> tt;
     for(int i = 0; i < tt; i++){
       best = INT_MAX;
-        cin >> n>> k;
+        cin >> n >> k;
         vector<vector<int>> a;
         for(int j = 0; j < n; j++){
             vector<int> row;
@@ -274,8 +281,6 @@ int main(){
             }
             a.push_back(row);
         }
-        //printpointset(a);
         solve(a,k);
-        //test(a,k);
     }
 }
