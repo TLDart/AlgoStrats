@@ -121,13 +121,13 @@ Such data structure allows to perform random access in O(1). It also takes advan
     The complexity of the base case is O(1);
 
 ### Time
-    The time complexity of each recursive step is O(n) for checking , 4x O(n) for creating each copy of the matrix, and the 2x4 O(4n) which totals 13n;
-    Using the master Theorem, the complexity is given by:
-        {
-            4T(n) + n^12
-            O(1)
-        }
-        since log1(4) < 12, then the complexity is O(n^12);
+    The time complexity of each recursive step is O(n):
+    * O(n) for checking;
+    * 4.O(n) for creating each copy of the matrix;
+    * 8.O(n) for all the slide operations;
+    Which Total 13.O(n) ~ O(n)
+    
+    
 
 ## References
 * Algorithms, Jeff Erikson
