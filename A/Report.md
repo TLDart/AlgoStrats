@@ -1,7 +1,7 @@
 # EA Problem Report
 ### Contributors
 * Duarte Dias 2018293526 duartedias@student.dei.uc.pt
-* Maria Dias ---- -----
+* Maria Dias 2018274188 mddias@student.dei.uc.pt
 
 ## Algorithm Description
 Note : To Describe complexity, O(n) is considered to be one complete full pass in the matrix.
@@ -113,20 +113,19 @@ Such data structure allows to perform random access in O(1). It also takes advan
 
 ## Correctness
     Score: 200 Points;
-    The problem 2048 is NP complete, which means it cannot be calculated in polynomial time, therefore all combinations must be tested. The backtracking approach lies on this premisse, testing all feasible solutions (ie making cuts in the certain branches where no better solution/ no solution could be found)
+The problem 2048 is NP complete, which means it cannot be calculated in polynomial time, therefore all combinations must be tested. The backtracking approach lies on this premisse, testing all feasible solutions (ie making cuts in the certain branches where no better solution/ no solution could be found)
 ## Algorithm Analysis
 
 ### Memory
-    Using Big-O notation, the memory complexity of each recursive step is O(4^n), because each step 4 copys of the matrix are created;
-    The complexity of the base case is O(1);
+Using Big-O notation, the memory complexity of each recursive step is O(4^n), because each step 4 copys of the matrix are created;
+The complexity of the base case is O(1);
 
 ### Time
-    The time complexity of each recursive step is O(n):
-    * O(n) for checking;
-    * 4.O(n) for creating each copy of the matrix;
-    * 8.O(n) for all the slide operations;
-    Which Total 13.O(n) ~ O(n)
-    
+The time complexity of each recursive step is O(n):
+* O(n) for checking;
+* 4.O(n) for creating each copy of the matrix;
+* 8.O(n) for all the slide operations;
+Which Totals 13.O(n) ~ O(n)
     
 
 ## References
